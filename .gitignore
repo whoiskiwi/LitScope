@@ -2,10 +2,10 @@
 .env
 *.env
 
-# Data files (large, kept locally)
-backend/data/*.csv
-backend/data/*.npy
-backend/data/by_platform/
+# Data files — included in repo for deployment
+# backend/data/*.csv
+# backend/data/*.npy
+# backend/data/by_platform/
 
 # Python
 __pycache__/
@@ -24,3 +24,4 @@ frontend/dist/
 # IDE
 .vscode/
 .idea/
+hf-litscope/

@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: litscope-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: PYTHONPATH=. uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DEEPSEEK_API_KEY
+        sync: false
+    healthCheckPath: /api/health
