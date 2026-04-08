@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react'
 import { fetchStats } from '../api'
-import StatCard      from '../components/StatCard'
-import PlatformChart from '../components/PlatformChart'
-import YearChart     from '../components/YearChart'
 
 export default function DashboardPage() {
   const [stats, setStats]   = useState(null)
@@ -17,25 +14,47 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <h2 style={{ marginTop: 0 }}>Literature Overview</h2>
 
-      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 32 }}>
-        <StatCard label="Total Papers"   value={stats.total} />
-        <StatCard label="Behavioral"     value={stats.behavioral_count} />
-        <StatCard label="Behavioral %"   value={`${stats.behavioral_pct}%`} />
-        <StatCard label="Unclassified"   value={stats.unclassified} color="#f59e0b" />
+      {/* Hero: intro left, video right */}
+      <div style={{
+        display: 'flex', gap: 48, alignItems: 'center',
+        flexWrap: 'wrap', marginBottom: 48, paddingBottom: 40,
+        borderBottom: '1px solid #e8e8e8',
+      }}>
+        {/* Left: intro text */}
+        <div style={{ flex: 1, minWidth: 260 }}>
+          <h1 style={{ fontSize: '2.2rem', lineHeight: 1.2, margin: '0 0 12px' }}>
+            Find the Right IS Literature,<br />Faster.
+          </h1>
+          <p style={{ fontSize: '0.75rem', letterSpacing: '0.12em', color: '#e05a4e',
+            textTransform: 'uppercase', fontWeight: 600, margin: '0 0 20px' }}>
+            <span>Focused on Information Systems</span>
+            <span style={{ display: 'block', marginTop: '4px' }}>
+              More Domains Coming Soon...
+            </span>
+          </p>
+          <p style={{ color: '#555', lineHeight: 1.8, margin: '0 0 16px' }}>
+            LitScope indexes <strong>{stats.total.toLocaleString()} papers</strong> across top-tier IS journals — MISQ, ISR, and JMIS — and lets you search by theory, topic, or
+            natural language query. No more sifting through hundreds of irrelevant
+            results. Find TAM studies, UTAUT papers, or privacy-calculus research
+            in seconds, with semantic search that understands IS terminology.
+          </p>
+          <p style={{ color: '#555', lineHeight: 1.8, margin: '0 0 28px' }}>
+            Currently, papers are classified by <strong>behavioral theory usage</strong>. Future IS dimensions — including research methodology, technology type, industry context, and theoretical lens — will be added progressively.
+            Beyond IS, LitScope will expand to support literature in <strong> other disciplines</strong>, each with domain-specific classification models trained for that field.
+          </p>
+        </div>
+
+        {/* Right: video */}
+        <div style={{ flex: 1.4, minWidth: 300 }}>
+          <video
+            src="/videos/litscope.mp4"
+            controls
+            style={{ width: '100%', borderRadius: 6, display: 'block' }}
+          />
+        </div>
       </div>
 
-      <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
-        <div style={{ flex: 1, minWidth: 320, background: '#fff', borderRadius: 8, padding: 20 }}>
-          <h3 style={{ marginTop: 0 }}>By Platform</h3>
-          <PlatformChart data={stats.by_platform} />
-        </div>
-        <div style={{ flex: 2, minWidth: 400, background: '#fff', borderRadius: 8, padding: 20 }}>
-          <h3 style={{ marginTop: 0 }}>Publications by Year</h3>
-          <YearChart data={stats.by_year} />
-        </div>
-      </div>
 
       {stats.top_theories.length > 0 && (
         <div style={{ marginTop: 24, background: '#fff', borderRadius: 8, padding: 20 }}>

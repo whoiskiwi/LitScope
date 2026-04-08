@@ -18,7 +18,7 @@ import os
 import re
 import numpy as np
 import pandas as pd
-from litscope.config import CLASSIFIED_CSV, EMBEDDINGS_FILE
+from litscope.config import CLASSIFIED_CSV, EMBEDDINGS_FILE, FINETUNED_MODEL
 
 # ── Tunable weights ────────────────────────────────────────────────────────────
 BEHAVIORAL_BOOST  = 0.12   # added to score for behavioral papers (high conf)
@@ -63,7 +63,7 @@ def _load():
 
     if _model is None:
         from sentence_transformers import SentenceTransformer
-        _model = SentenceTransformer("allenai-specter")
+        _model = SentenceTransformer(FINETUNED_MODEL)
 
     if _embeddings is None or _df is None:
         if not os.path.exists(EMBEDDINGS_FILE):

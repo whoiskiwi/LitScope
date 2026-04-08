@@ -1,6 +1,8 @@
-function platformUrl(platform, doi) {
-  if (!doi) return '#'
-  return `https://doi.org/${doi}`
+function isValidDoi(doi) {
+  if (!doi) return false
+  // 10.5555 is ACM's internal prefix, not registered with DOI Foundation
+  if (doi.startsWith('10.5555/')) return false
+  return true
 }
 
 export default function PaperDetail({ paper, onClose }) {
@@ -55,14 +57,18 @@ export default function PaperDetail({ paper, onClose }) {
         {paper.doi && (
           <p style={{ fontSize: 12, marginTop: 16 }}>
             <b>DOI: </b>
-            <a
-              href={platformUrl(paper.platform, paper.doi)}
-              target="_blank"
-              rel="noreferrer"
-              style={{ color: '#4a9eff' }}
-            >
-              {paper.doi}
-            </a>
+            {isValidDoi(paper.doi) ? (
+              <a
+                href={`https://doi.org/${paper.doi}`}
+                target="_blank"
+                rel="noreferrer"
+                style={{ color: '#4a9eff' }}
+              >
+                {paper.doi}
+              </a>
+            ) : (
+              <span style={{ color: '#999' }}>{paper.doi}</span>
+            )}
           </p>
         )}
       </div>

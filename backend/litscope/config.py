@@ -53,7 +53,8 @@ RAW_CSV         = f"{DATA_DIR}/papers_raw.csv"
 CLASSIFIED_CSV  = f"{DATA_DIR}/papers_classified.csv"
 BY_PLATFORM_CSV = f"{DATA_DIR}/papers_by_platform.csv"
 BY_PLATFORM_DIR = f"{DATA_DIR}/by_platform"
-EMBEDDINGS_FILE = f"{DATA_DIR}/papers_embeddings.npy"
+EMBEDDINGS_FILE  = f"{DATA_DIR}/papers_embeddings.npy"
+FINETUNED_MODEL  = f"{DATA_DIR}/models/specter-is-finetuned"
 
 # ── CSV column order ──────────────────────────────────────────────────────────
 CSV_COLUMNS = [

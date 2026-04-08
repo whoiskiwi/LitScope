@@ -2,11 +2,14 @@
 routers/search.py — Semantic search endpoint
 """
 
+import random
+import pandas as pd
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 from typing import Optional
 
 from litscope.searcher import search
+from litscope.config import CLASSIFIED_CSV
 
 router = APIRouter(prefix="/api/search", tags=["search"])
 
@@ -30,6 +33,29 @@ def semantic_search(req: SearchRequest):
         only_behavioral=req.only_behavioral,
     )
     return {"query": req.query, "results": results}
+
+
+@router.get("/examples")
+def get_example_queries(n: int = Query(6, ge=1, le=20)):
+    """
+    Sample behavioral papers, use their titles as queries, run real search,
+    return the n queries with highest top-1 similarity (what the model is best at).
+    """
+    df = pd.read_csv(CLASSIFIED_CSV)
+    pool = df[(df["is_behavioral"] == True) & (df["confidence"] == "high")]["title"].dropna()
+    candidates = pool.sample(min(20, len(pool)), random_state=random.randint(0, 9999)).tolist()
+
+    scored = []
+    for title in candidates:
+        try:
+            results = search(query=title, top_k=1)
+            if results:
+                scored.append({"query": title, "similarity": results[0]["similarity"]})
+        except Exception:
+            pass
+
+    scored.sort(key=lambda x: x["similarity"], reverse=True)
+    return {"examples": [s["query"] for s in scored[:n]]}
 
 
 @router.get("")

@@ -14,13 +14,22 @@ def _reconstruct_abstract(inverted_index: dict) -> str:
     return " ".join(words[i] for i in sorted(words))
 
 
-def fetch_openalex(journal: dict, exclude_dois: set = None) -> list:
+def fetch_openalex(journal: dict, exclude_dois: set = None, since_year: int = None) -> list:
     exclude_dois = exclude_dois or set()
     papers  = []
     url     = "https://api.openalex.org/works"
     headers = {"User-Agent": OPENALEX_USER_AGENT}
+
+    # Build filter — add year lower-bound if provided (incremental fetch)
+    base_filter = f"primary_location.source.id:{journal['openalex_id']},has_abstract:true"
+    if since_year:
+        base_filter += f",publication_year:>{since_year - 1}"
+        print(f"[Fetcher] {journal['short']} — incremental fetch since year {since_year}")
+    else:
+        print(f"[Fetcher] {journal['short']} — full fetch up to {journal['max']} papers")
+
     params  = {
-        "filter":   f"primary_location.source.id:{journal['openalex_id']},has_abstract:true",
+        "filter":   base_filter,
         "select":   "title,abstract_inverted_index,publication_year,doi,authorships",
         "per-page": FETCH_BATCH,
         "page":     1,

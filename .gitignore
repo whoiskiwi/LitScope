@@ -7,6 +7,9 @@
 # backend/data/*.npy
 # backend/data/by_platform/
 
+# Large model files (>100MB, exceeds GitHub limit)
+backend/data/models/specter-is-finetuned/model.safetensors
+
 # Python
 __pycache__/
 *.pyc

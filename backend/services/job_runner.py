@@ -76,9 +76,19 @@ def run_fetch(journals: list[str] | None = None) -> Optional[str]:
         targets      = JOURNALS if not journals else [j for j in JOURNALS if j["short"] in journals]
         df_existing  = load_csv(CLASSIFIED_CSV)
         exclude_dois = get_existing_dois(df_existing)
+
+        # Incremental fetch: only query OpenAlex for papers in the most recent year
+        # present in the database (catches new papers + late-indexed ones from same year).
+        # Falls back to full fetch if database is empty.
+        since_year = None
+        if not df_existing.empty and "year" in df_existing.columns:
+            max_year = pd.to_numeric(df_existing["year"], errors="coerce").max()
+            if pd.notna(max_year):
+                since_year = int(max_year)
+
         all_new = []
         for j in targets:
-            papers = fetch_openalex(j, exclude_dois=exclude_dois)
+            papers = fetch_openalex(j, exclude_dois=exclude_dois, since_year=since_year)
             all_new.extend(papers)
         if all_new:
             df_new    = pd.DataFrame(all_new)
