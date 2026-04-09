@@ -1,12 +1,10 @@
 import { useState } from 'react'
 import DashboardPage from './pages/DashboardPage'
-import BrowsePage    from './pages/BrowsePage'
 import SearchPage    from './pages/SearchPage'
 
 const NAV = [
-  { key: 'dashboard', label: 'Dashboard',     icon: 'fa-chart-bar' },
-  { key: 'search',    label: 'Search',        icon: 'fa-search' },
-  { key: 'browse',    label: 'Browse Papers', icon: 'fa-book-open' },
+  { key: 'dashboard', label: 'Dashboard', icon: 'fa-chart-bar' },
+  { key: 'search',    label: 'Search',    icon: 'fa-search' },
 ]
 
 export default function App() {
@@ -29,7 +27,6 @@ export default function App() {
           {/* Page Content */}
           {page === 'dashboard' && <DashboardPage />}
           {page === 'search'    && <SearchPage />}
-          {page === 'browse'    && <BrowsePage />}
 
         </div>
       </div>
